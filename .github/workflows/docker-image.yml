@@ -1,0 +1,144 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+- name: GitHub Action for NPM/Chrome
+  # You may pin to the exact commit or the version.
+  # uses: daleobrien/npm-with-chrome-browser-action@dfe13b04e9f0fcea5e77f1e1692487282bca0970
+  uses: daleobrien/npm-with-chrome-browser-action@v1.0.1
+
+  - name: Snapcraft Multiarch Build
+  # You may pin to the exact commit or the version.
+  # uses: diddlesnaps/snapcraft-multiarch-action@13b50f0e7da3dfc5d9d26fc53cd665f31ccd3da7
+  uses: diddlesnaps/snapcraft-multiarch-action@v1.8.0
+  with:
+    # The location of the Snapcraft project.
+Defaults to the base of the repository
+
+    path: # default is .
+    # Use Podman instead of Docker (experimental)
+You cannot build for foreign architectures via binfmt using Podman. Therefore, this is best used when you are using a self-hosted runner that has the correct target architecture. Using the GitHub hosted runners you can only build for x86_64/amd64 with Podman.
+
+    use-podman: # optional, default is false
+    # Whether to include build information in the resulting snap.
+This will add snap/manifest.yaml and snap/snapcraft.yaml files to the snap.  The Snap Store can use this information to detect snaps with security vulnerabilities introduced through stage-packages.
+Proprietary applications may want to disable this due to the information leakage.
+
+    build-info: # optional, default is true
+    # The Snapcraft channel to use
+By default, the action will use the stable version of Snapcraft to build the project.  This parameter can be used to instead select a different channel such as beta, candidate, or edge.
+
+    snapcraft-channel: # optional, default is stable
+    # Additional arguments to pass to Snapcraft
+Some experimental Snapcraft features are disabled by default and must be turned on via a `--enable-experimental-*` command line argument.  This parameter can be used to turn on such features.
+
+    snapcraft-args: # optional
+    # The architecture to build with Snapcraft
+Snap Packages run on multiple CPU architectures. This parameter allows you to build for any of the supported architectures. It accepts the same values you would use in the `build-on` option in your `snapcraft.yaml` when building via the Build Service. You may only specify one architecture at a time so it's best to combine this with the build matrix feature of GitHub Actions.
+
+    architecture: # default is amd64
+    # Environment to pass to Snapcraft
+Add environment variables to the Snapcraft build context. Each variable needs to be specified on a separate line.  For example:
+
+    environment: |
+      FOO=bar
+      BAZ=qux
+
+    environment: # optional
+    # The Snap Store authentication token
+This token is used to authenticate with the Snap Store when uploading the snap.  It can be obtained by running `snapcraft export-login --snaps <snap-name> -` and copying the output.
+
+    store-auth: # optional
+
+    - name: Install KittyCAD CLI
+  # You may pin to the exact commit or the version.
+  # uses: KittyCAD/action-install-cli@e26335459a56f191468e88c61d66f3f0b7d5dd79
+  uses: KittyCAD/action-install-cli@v0.1.1
+
+  - name: Dapr tool installer
+  # You may pin to the exact commit or the version.
+  # uses: dapr/setup-dapr@ffde132592c51fcb876dff3925598fd150137569
+  uses: dapr/setup-dapr@v1
+  with:
+    # Version of Dapr CLI to install
+    version: # optional, default is 1.2.0
+  - name: OpenShift Client Installer
+  # You may pin to the exact commit or the version.
+  # uses: redhat-actions/oc-installer@05af0974d0953def85e03b17b8d918ac4026d22d
+  uses: redhat-actions/oc-installer@v1
+  with:
+    # "oc version to install. It can be a version (eg. 4.6) or a URL pointing to an oc download.
+If left blank, the latest oc is installed."
+
+    oc_version: # default is latest
+
+    - name: DeepSource Test Coverage Action
+  # You may pin to the exact commit or the version.
+  # uses: DeepSourceCorp/test-coverage-action@e02a039827236fa21a95866e7cd0b1c52ca61e76
+  uses: DeepSourceCorp/test-coverage-action@v1.1.2
+  with:
+    # Programming language shortcode for which coverage is reported. Allowed values are — python, go, javascript, ruby, java, kotlin, scala, php, csharp, cxx, rust, swift
+    key: 
+    # Path to the coverage data file. e.g. ./coverage.xml
+    coverage-file: 
+    # DeepSource DSN of this repository. It is available under Settings → Reporting tab of the repository page on DeepSource.
+    dsn: 
+    # Should the CI build fail if there is an error while uploading the report to DeepSource? Allowed values are — true, false
+    fail-ci-on-error: # optional
+    # HEAD commit for which the Test Coverage report is being sent
+    commit-sha: # optional, default is ${{ github.event.pull_request.head.sha }}
+    - name: NowSecure
+  # You may pin to the exact commit or the version.
+  # uses: nowsecure/nowsecure-action@f5f990ada03919043d14f6cb1dbfdb6fccf5517d
+  uses: nowsecure/nowsecure-action@v1
+  with:
+    # NowSecure Platform token.
+    token: 
+    # NowSecure GraphQL API endpoint.
+    api_url: # optional, default is https://api.nowsecure.com
+    # NowSecure Lab API endpoint.
+    lab_api_url: # optional, default is https://lab-api.nowsecure.com
+    # NowSecure Lab URL.
+    lab_url: # optional, default is https://lab.nowsecure.com
+    # Path containing .nsconfig.yml
+    config_path: # optional, default is .
+    # Application binary to scan on NowSecure. Must be an Android or iOS application.
+    app_file: 
+    # Group ID for the application in Platform.
+    group_id: 
+    # Head start in milliseconds to give Platform before an application is polled for details. Default is 5 minutes.
+    headstart_ms: # optional, default is 300000
+    # Interval to poll Platform for application details. Default is once a minute.
+    poll_interval_ms: # optional, default is 60000
+    # Enable creation of a SARIF file.
+    enable_sarif: # optional, default is true
+    # Enable posting of dependencies results to GitHub.
+    enable_dependencies: # optional
+    # 
+    github_token: # optional, default is ${{ github.token }}
+    # Used for the correlator field in the SBOM format. Distinguishes independent Workflows.
+    github_correlator: # optional, default is ${{ format('{0}_{1}', github.workflow, github.job) }}
+    - name: Flinter.md-dev
+  # You may pin to the exact commit or the version.
+  # uses: bradystroud/Flinter@efb03fe4636a98f2c373ec4081e792c8d99078a3
+  uses: bradystroud/Flinter@dev3
+  with:
+    # GitHub token
+    GITHUB_TOKEN: 
+    # Debug logging
+    DEBUG: # optional, default is false
